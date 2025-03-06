@@ -1,50 +1,3 @@
-// pipeline {
-//     agent any
-
-//     tools {
-//         // Spécifiez la version de Node.js à utiliser
-//         nodejs 'node20'
-//     }
-
-//     stages {
-//         // Étape 1 : Récupération du code source
-//         stage('Checkout') {
-//             steps {
-//                 git branch: 'main', url: 'https://github.com/Sarahbelaarabi/react.git'
-//             }
-//         }
-
-//         // Étape 2 : Installation des dépendances
-//         stage('Installation des Dépendances') {
-//             steps {
-//                 sh 'npm install'
-//             }
-//         }
-
-//         // Étape 3 : Exécution des tests
-//         stage('Tests') {
-//             steps {
-//                 sh 'npm test'
-//             }
-//         }
-//         stage('Build') {
-//             steps {
-//                 sh 'npm run build'
-//             }
-//         }
-//     }
-
-//     post {
-//         success {
-//             echo 'Le pipeline a réussi !'
-//         }
-//         failure {
-//             echo 'Le pipeline a échoué.'
-//         }
-//     }
-// }
-
-
 pipeline {
     agent any
 
@@ -74,29 +27,9 @@ pipeline {
                 sh 'npm test'
             }
         }
-
-        // Étape 4 : Build
         stage('Build') {
             steps {
                 sh 'npm run build'
-            }
-        }
-
-        // Étape 5 : Delivery
-        stage('Deliver') {
-            steps {
-                sh '''
-                    npm run build
-                    npm start &
-                    sleep 1
-                    echo $! > .pidfile
-                    echo 'Now...'
-                    echo 'Visit http://localhost:3000 to see your Node.js/React application in action.'
-                '''
-                input message: 'Finished using the web site? (Click "Proceed" to continue)'
-                sh '''
-                    kill $(cat .pidfile)
-                '''
             }
         }
     }
